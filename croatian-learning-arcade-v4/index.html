@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Interactive Croatian learning arcade with grammar chunks, minigames and crosswords.">
+  <title>Križalica Arcade — Learn Croatian by Playing</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="ambient ambient-a"></div>
+  <div class="ambient ambient-b"></div>
+
+  <main class="app-shell">
+    <header class="topbar">
+      <button class="brand" id="brandHome" type="button" aria-label="Go to learning path">
+        <span class="brand-mark" id="brandMark" aria-hidden="true">K</span>
+        <span class="brand-copy"><strong>Križalica Arcade</strong><small>Croatian Learning Games</small></span>
+      </button>
+      <div class="topbar-right">
+        <div class="xp-pill"><span>XP</span><strong id="globalXp">0</strong></div>
+        <div class="star-pill"><span>★</span><strong id="globalStars">0</strong></div>
+        <button id="musicToggle" class="icon-button music-button" type="button" aria-label="Music settings" title="Music settings">♫</button>
+        <button id="vrQuickButton" class="icon-button vr-quick-button" type="button" aria-label="Open VR Word Arena" title="VR Word Arena">VR</button>
+        <button id="themeToggle" class="icon-button" type="button" aria-label="Toggle theme">◐</button>
+      </div>
+    </header>
+
+    <section id="hubScreen" class="screen hub-screen">
+      <section class="hero-card">
+        <div>
+          <p class="eyebrow">LEARN IN CHUNKS · THEN PLAY WITH THEM</p>
+          <h1>Build Croatian grammar one useful pattern at a time.</h1>
+          <p>Each unit teaches a small set of forms. The minigames only use material from that unit, so you are not thrown randomly from beginner words into advanced grammar.</p>
+        </div>
+        <div class="hero-progress">
+          <div class="ring" id="courseRing"><span id="coursePercent">0%</span></div>
+          <div><strong id="courseProgressLabel">Unit 1 of 6</strong><small>Course progress</small></div>
+        </div>
+      </section>
+
+      <section class="path-card">
+        <div class="section-heading">
+          <div><p class="eyebrow">LEARNING PATH</p><h2>Choose a grammar chunk</h2></div>
+          <span class="soft-label">Progress saves automatically</span>
+        </div>
+        <div id="unitPath" class="unit-path" aria-label="Croatian course units"></div>
+      </section>
+
+      <section class="selected-unit-card">
+        <div class="unit-summary">
+          <div class="unit-number" id="selectedUnitNumber">01</div>
+          <div>
+            <div class="unit-meta-line"><span id="selectedUnitLevel">A1</span><span id="selectedUnitCase">Nominative</span></div>
+            <h2 id="selectedUnitTitle">Meet the Words</h2>
+            <p id="selectedUnitDescription"></p>
+          </div>
+        </div>
+        <div class="unit-stars"><span>Unit stars</span><strong id="selectedUnitStars">0 / 6</strong></div>
+      </section>
+
+      <section class="game-grid" aria-label="Learning games">
+        <article class="game-card lesson-card">
+          <div class="game-icon">Aa</div>
+          <span class="game-kicker">START HERE</span>
+          <h3>Learn the Chunk</h3>
+          <p>Short explanation, examples and a quick check before the games.</p>
+          <button data-open-mode="lesson" class="game-launch" type="button">Open lesson <span>→</span></button>
+        </article>
+
+        <article class="game-card runner-card">
+          <div class="game-icon">↟</div>
+          <span class="game-kicker">PLATFORMER</span>
+          <h3>Case Runner</h3>
+          <p>Run and jump onto the platform carrying the correct Croatian form.</p>
+          <button data-open-mode="runner" class="game-launch" type="button">Play Case Runner <span>→</span></button>
+        </article>
+
+        <article class="game-card morph-card">
+          <div class="game-icon">↻</div>
+          <span class="game-kicker">WORD FORMS</span>
+          <h3>Word Morph</h3>
+          <p>Watch a base word change, then choose the form that fits the sentence.</p>
+          <button data-open-mode="morph" class="game-launch" type="button">Play Word Morph <span>→</span></button>
+        </article>
+
+        <article class="game-card sentence-card">
+          <div class="game-icon">▦</div>
+          <span class="game-kicker">BUILD IT</span>
+          <h3>Sentence Builder</h3>
+          <p>Assemble real Croatian sentences from shuffled tiles and case forms.</p>
+          <button data-open-mode="sentence" class="game-launch" type="button">Build sentences <span>→</span></button>
+        </article>
+
+        <article class="game-card crossword-card">
+          <div class="game-icon">#</div>
+          <span class="game-kicker">VOCABULARY + FORMS</span>
+          <h3>Chunk Crossword</h3>
+          <p>A generated crossword using only the words and forms from this unit.</p>
+          <button data-open-mode="crossword" class="game-launch" type="button">Generate crossword <span>→</span></button>
+        </article>
+
+        <article class="game-card vr-card">
+          <div class="game-icon">VR</div>
+          <span class="game-kicker">WEBXR · QUEST READY</span>
+          <h3>VR Word Arena</h3>
+          <p>Stand inside a 3D Croatian quiz room. Point at the correct form with a controller or compatible hand input.</p>
+          <button data-open-mode="vr" class="game-launch" type="button">Open VR arena <span>→</span></button>
+        </article>
+      </section>
+    </section>
+
+    <section id="lessonScreen" class="screen mode-screen" hidden>
+      <div class="mode-topline"><button class="back-button" data-back-home type="button">← Learning path</button><div class="mode-score"><span>Unit</span><strong id="lessonUnitBadge"></strong></div></div>
+      <div class="lesson-layout">
+        <article class="lesson-main panel">
+          <p class="eyebrow" id="lessonCase"></p>
+          <h1 id="lessonTitle"></h1>
+          <p class="lead" id="lessonDescription"></p>
+          <div class="rule-box"><span>THE IDEA</span><p id="lessonRule"></p></div>
+          <h3>Useful examples</h3>
+          <div id="lessonExamples" class="example-list"></div>
+        </article>
+        <aside class="lesson-side panel">
+          <h3>Remember these</h3>
+          <ul id="lessonTips" class="tips-list"></ul>
+          <div class="lesson-check">
+            <span class="game-kicker">QUICK CHECK</span>
+            <p id="lessonQuestion"></p>
+            <div id="lessonAnswers" class="answer-stack"></div>
+            <div id="lessonFeedback" class="feedback"></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="morphScreen" class="screen mode-screen" hidden>
+      <div class="mode-topline"><button class="back-button" data-back-home type="button">← Learning path</button><div class="mode-score"><span>Score</span><strong id="morphScore">0 / 0</strong></div></div>
+      <article class="minigame-panel panel">
+        <div class="minigame-heading"><div><p class="eyebrow">WORD MORPH</p><h1>Choose the form that fits.</h1></div><div class="lives" id="morphLives">♥ ♥ ♥</div></div>
+        <div class="morph-stage">
+          <div class="base-word-card"><small>BASE FORM</small><strong id="morphBase">KUĆA</strong></div>
+          <div class="morph-arrow">→</div>
+          <div class="prompt-card"><small>USE IT HERE</small><p id="morphPrompt"></p></div>
+        </div>
+        <div id="morphOptions" class="choice-grid"></div>
+        <div id="morphFeedback" class="feedback large-feedback"></div>
+      </article>
+    </section>
+
+    <section id="sentenceScreen" class="screen mode-screen" hidden>
+      <div class="mode-topline"><button class="back-button" data-back-home type="button">← Learning path</button><div class="mode-score"><span>Score</span><strong id="sentenceScore">0 / 0</strong></div></div>
+      <article class="minigame-panel panel">
+        <div class="minigame-heading"><div><p class="eyebrow">SENTENCE BUILDER</p><h1>Build the Croatian sentence.</h1></div><div class="streak" id="sentenceStreak">0 streak</div></div>
+        <div class="translation-card"><small>ENGLISH</small><p id="sentenceEnglish"></p></div>
+        <div id="sentenceBuild" class="sentence-build" aria-label="Your sentence"><span class="sentence-placeholder">Choose tiles below…</span></div>
+        <div id="sentenceTiles" class="sentence-tiles"></div>
+        <div class="sentence-actions"><button id="sentenceUndo" type="button">Undo</button><button id="sentenceReset" type="button">Reset</button><button id="sentenceCheck" class="primary-button" type="button">Check sentence</button></div>
+        <div id="sentenceFeedback" class="feedback large-feedback"></div>
+      </article>
+    </section>
+
+    <section id="runnerScreen" class="screen mode-screen" hidden>
+      <div class="mode-topline"><button class="back-button" data-back-home type="button">← Learning path</button><div class="mode-score"><span>Score</span><strong id="runnerScore">0</strong></div></div>
+      <article class="runner-panel panel">
+        <div class="runner-hud"><div><p class="eyebrow">CASE RUNNER</p><h1 id="runnerPrompt">Jump onto the correct answer.</h1></div><div class="runner-stats"><span id="runnerLives">♥ ♥ ♥</span><strong id="runnerRound">1 / 5</strong></div></div>
+        <canvas id="runnerCanvas" width="900" height="440" aria-label="Case Runner platform game"></canvas>
+        <div class="runner-controls">
+          <button data-runner-control="left" type="button">← Left</button>
+          <button data-runner-control="jump" class="jump-button" type="button">↑ Jump</button>
+          <button data-runner-control="right" type="button">Right →</button>
+        </div>
+        <p class="control-hint">Keyboard: A/D or ←/→ to move · W, ↑ or Space to jump</p>
+        <div id="runnerFeedback" class="feedback runner-feedback"></div>
+      </article>
+    </section>
+
+    <section id="vrScreen" class="screen mode-screen" hidden>
+      <div class="mode-topline"><button class="back-button" data-back-home type="button">← Learning path</button><div class="mode-score"><span>VR score</span><strong id="vrScore">0</strong></div></div>
+      <article class="panel vr-panel">
+        <div class="vr-heading">
+          <div><p class="eyebrow">WEBXR WORD ARENA</p><h1>Point. Choose. Learn.</h1><p id="vrPromptText" class="lead">Select a grammar chunk, then enter the arena.</p></div>
+          <div class="vr-round-box"><span>Round</span><strong id="vrRound">1 / 5</strong></div>
+        </div>
+        <div class="vr-stage-wrap">
+          <canvas id="vrCanvas" width="1100" height="620" aria-label="3D preview of the Croatian VR Word Arena"></canvas>
+          <div class="vr-corner-badge">3D PREVIEW</div>
+        </div>
+        <div class="vr-actions">
+          <button id="enterVrButton" class="primary-button" type="button">Checking VR…</button>
+          <button id="vrResetButton" type="button">New VR round</button>
+        </div>
+        <div id="vrStatus" class="feedback vr-status">Checking WebXR support…</div>
+        <div class="vr-help-grid">
+          <div><strong>Quest controllers</strong><span>Point the ray at an answer and pull the trigger.</span></div>
+          <div><strong>Hand tracking</strong><span>When WebXR exposes a hand select action, point and pinch to choose.</span></div>
+          <div><strong>Desktop test</strong><span>Click the floating answer cards in the 3D preview.</span></div>
+          <div><strong>Important</strong><span>Immersive VR requires HTTPS. Opening index.html directly still supports desktop mode.</span></div>
+        </div>
+      </article>
+    </section>
+
+    <section id="crosswordScreen" class="screen mode-screen" hidden>
+      <div class="mode-topline"><button class="back-button" data-back-home type="button">← Learning path</button><div class="mode-score"><span>Chunk crossword</span><strong id="cwUnitBadge"></strong></div></div>
+      <section class="crossword-layout">
+        <div class="crossword-main">
+          <article class="panel crossword-board-panel">
+            <div class="crossword-top"><div><p class="eyebrow">ENGLISH CLUES · CROATIAN ANSWERS</p><h1>Chunk Crossword</h1><p id="cwActiveClue">Select a square or clue.</p></div><div class="cw-progress"><span id="cwPercent">0%</span><div class="tiny-track"><div id="cwProgressBar"></div></div></div></div>
+            <div class="board-scroll"><div id="crosswordGrid" class="crossword-grid"></div></div>
+          </article>
+          <article class="panel keyboard-card">
+            <div class="keyboard-heading"><div><strong>Croatian keyboard</strong><small>Č · Ć · Đ · Š · Ž included</small></div><span>Click a square, then a key</span></div>
+            <div id="onscreenKeyboard" class="onscreen-keyboard">
+              <div class="keyboard-row"><button data-key="Q">Q</button><button data-key="W">W</button><button data-key="E">E</button><button data-key="R">R</button><button data-key="T">T</button><button data-key="Z">Z</button><button data-key="U">U</button><button data-key="I">I</button><button data-key="O">O</button><button data-key="P">P</button><button data-key="Š" class="croatian-key">Š</button><button data-key="Đ" class="croatian-key">Đ</button></div>
+              <div class="keyboard-row"><button data-key="A">A</button><button data-key="S">S</button><button data-key="D">D</button><button data-key="F">F</button><button data-key="G">G</button><button data-key="H">H</button><button data-key="J">J</button><button data-key="K">K</button><button data-key="L">L</button><button data-key="Č" class="croatian-key">Č</button><button data-key="Ć" class="croatian-key">Ć</button><button data-key="Ž" class="croatian-key">Ž</button></div>
+              <div class="keyboard-row"><button data-key="Y">Y</button><button data-key="X">X</button><button data-key="C">C</button><button data-key="V">V</button><button data-key="B">B</button><button data-key="N">N</button><button data-key="M">M</button><button data-action="backspace" class="wide-key">⌫ Backspace</button></div>
+            </div>
+          </article>
+          <div class="cw-actions"><button id="cwCheck" class="primary-button">✓ Check</button><button id="cwRevealLetter">Reveal letter</button><button id="cwRevealWord">Reveal word</button><button id="cwReset">Reset</button><button id="cwNew">New puzzle</button></div>
+          <div id="cwFeedback" class="feedback"></div>
+        </div>
+        <aside class="panel clues-panel"><div class="section-heading"><div><p class="eyebrow">CLUES</p><h2>English hints</h2></div></div><h3>Across</h3><ol id="acrossClues" class="clue-list"></ol><h3>Down</h3><ol id="downClues" class="clue-list"></ol></aside>
+      </section>
+    </section>
+  </main>
+
+  <div id="musicPopover" class="music-popover" hidden>
+    <div class="music-popover-head"><div><strong>Soundtrack</strong><small>Original procedural audio</small></div><button id="musicClose" type="button" aria-label="Close music settings">×</button></div>
+    <div class="music-mode-grid" id="musicModeGrid">
+      <button data-music-mode="auto" type="button">Auto<small>Ambient lessons · DnB games</small></button>
+      <button data-music-mode="ambient" type="button">Ambient<small>Calm study pad</small></button>
+      <button data-music-mode="dnb" type="button">DnB<small>174 BPM game loop</small></button>
+      <button data-music-mode="off" type="button">Off<small>Silence</small></button>
+    </div>
+    <label class="volume-row"><span>Volume</span><input id="musicVolume" type="range" min="0" max="1" step="0.01" value="0.42"></label>
+    <p id="musicStatus" class="music-note">Click a soundtrack mode once to enable browser audio.</p>
+  </div>
+
+  <div id="completionModal" class="modal" hidden>
+    <div class="modal-card">
+      <div class="modal-burst">★</div>
+      <p class="eyebrow">ROUND COMPLETE</p>
+      <h2 id="completionTitle">Nice work</h2>
+      <p id="completionText"></p>
+      <div class="reward-row"><div><span>XP earned</span><strong id="completionXp">+0</strong></div><div><span>Stars</span><strong id="completionStars">+0 ★</strong></div></div>
+      <div class="modal-actions"><button id="completionHome" class="primary-button">Back to path</button><button id="completionReplay">Play again</button></div>
+    </div>
+  </div>
+
+  <div id="hunterEgg" class="modal easter-modal" hidden>
+    <div class="modal-card easter-card">
+      <div class="heart-pulse">♥</div>
+      <p class="eyebrow">TAJNA PORUKA</p>
+      <h2>For my son Hunter — volim te.</h2>
+      <p>A little message hidden inside the game.</p>
+      <button id="closeEgg" class="primary-button" type="button">♥</button>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" hidden></div>
+
+  <script src="vocabulary.js"></script>
+  <script src="course.js"></script>
+  <script src="crossword.js"></script>
+  <script src="audio.js"></script>
+  <script src="app.js"></script>
+  <script src="vr.js"></script>
+</body>
+</html>

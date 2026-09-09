@@ -1,0 +1,45 @@
+KRIŽALICA ARCADE V4 — META QUEST / WEBXR SETUP
+================================================
+
+Desktop mode
+------------
+You can still double-click index.html. All normal lessons, games, crosswords,
+procedural music and the 3D VR Arena preview work as a normal webpage.
+
+Immersive VR on Meta Quest
+--------------------------
+WebXR immersive-vr requires a secure web page. A local file:// page cannot enter
+immersive VR, and a normal HTTP LAN address generally does not count as secure.
+
+Recommended route:
+1. Upload the CONTENTS of this folder to any static HTTPS host such as GitHub Pages,
+   Netlify or Cloudflare Pages.
+2. Open the resulting https:// address in Meta Quest Browser.
+3. Choose a course unit.
+4. Open "VR Word Arena".
+5. Press "Enter VR".
+6. Point a Quest controller ray at an answer and pull the trigger.
+
+Hand tracking
+-------------
+The VR session requests hand-tracking as an OPTIONAL WebXR feature. Where the
+browser supplies a hand target ray/select action, the same answer interaction can
+be used with pointing + pinch. Controllers remain the reliable fallback.
+
+Why HTTPS is required
+---------------------
+Browsers protect immersive headset access behind WebXR secure-context and explicit
+user-action requirements. The Enter VR button performs the required user-triggered
+session request and the app feature-detects immersive-vr support before enabling it.
+
+Audio
+-----
+Press the music-note button in the top bar. Browser audio must be started by a user
+gesture, so music does not autoplay before you interact with the page.
+
+Auto     = ambient in hub/lessons, DnB in games/VR
+Ambient  = calm generative pad
+DnB      = original procedural 174 BPM loop
+Off      = soundtrack disabled
+
+No external music files are required.
